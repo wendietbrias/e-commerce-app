@@ -7,6 +7,7 @@ const Home = () => {
   return (
     <section className="flex flex-col justify-between min-h-screen w-full">
       <Navbar />
+      <div className="w-full px-20 py-10"></div>
       <Footer />
     </section>
   );

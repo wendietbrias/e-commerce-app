@@ -6,6 +6,7 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route index element={<Home />} />
+        <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />
       </Routes>
     </div>

@@ -19,6 +19,8 @@ const Auth = () => {
     if (pathname === "/register") {
       return;
     }
+
+    return;
   };
 
   const formHandler = (e) => {
