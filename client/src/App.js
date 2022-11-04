@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import { Auth } from "./pages";
+import { Auth, Home } from "./pages";
 
 const App = () => {
   return (
     <div className="App">
       <Routes>
-        <Route index element={<Auth />} />
+        <Route index element={<Home />} />
         <Route path="/register" element={<Auth />} />
       </Routes>
     </div>
