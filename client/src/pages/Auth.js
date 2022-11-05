@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
-import { Navbar, Alert } from "../components";
-import { CloseAlert } from "../store/Alert";
+import { Alert } from "../components";
 import { SignInHandler, SignUpHandler } from "../store/Auth";
 import { GoogleLogin } from "@react-oauth/google";
 import { GoogleLoginHandler } from "../store/Auth";
+import { OpenAlert } from "../store/Alert";
 
 const userRemember = JSON.parse(sessionStorage.getItem("remember")) || null;
 
@@ -171,12 +171,14 @@ const Auth = () => {
           </form>
         )}
         <div className="border-t border-gray-300 pt-3 mt-3 flex justify-center items-center">
-          <GoogleLogin
-            onSuccess={(response) => {
-              dispatch(GoogleLoginHandler(response?.credential));
-            }}
-            onError={(err) => console.log(err)}
-          />
+          {pathname === "/login" && (
+            <GoogleLogin
+              onSuccess={(response) => {
+                dispatch(GoogleLoginHandler(response?.credential));
+              }}
+              onError={(err) => console.log(err)}
+            />
+          )}
         </div>
       </div>
     </section>
