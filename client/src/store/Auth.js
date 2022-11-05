@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { OpenAlert, CloseAlert } from "../store/Alert";
+=======
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+>>>>>>> products/frontend
 
 const initialState = {
   user: JSON.parse(sessionStorage.getItem("user")) || null,
