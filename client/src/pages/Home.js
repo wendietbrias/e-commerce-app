@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar, Footer } from "../components";
 import { useSelector } from "react-redux";
 

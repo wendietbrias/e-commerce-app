@@ -19,7 +19,6 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "nama" => "required",
             "email" => "required",
             "password" => "required|min:8"
         ]);
@@ -27,20 +26,12 @@ class AuthController extends Controller
         if ($validator->fails())
         {
             return response()->json([
-                "message" => $validator->errors(),
+                "message" => $validator->errors()->first(),
             ], 400);
         }
 
         $data = User::with('seller')->where('email', $request->email)->get()->pluck('seller');
-        // return $data->pluck('penjual');
-        return $data;
-
-        // if ($data === 0)
-        // {
-        //     return response()->json([
-        //         "message" => "anda adalah seller"
-        //     ]);
-        // }
+  
     
         if (!$token = auth()->attempt($validator->validated()))
         {
@@ -61,13 +52,23 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             "nama" => "required",
-            "email" => "required|email",
-            "password" => "required|min:8"
+            "email" => "required|unique:users,email",
+            "password" => "required|min:8",
+            "confirm"=>"required|min:8|confirmed"
         ]);
 
-       $user = User::create(array_merge($validator->validated(), ["password" => bcrypt($request->password)]));
+        // if($request->password !== $request->confirm) {
+        //     return response()->json(["message"=>"Password tidak sesuai"] ,400);
+        // }
+
+        if($validator->fails()) {
+            return response()->json($validator->errors()->first(),  400);
+        }
+
+    //    $user = User::create(array_merge($validator->validated(), ["password" => bcrypt($request->password)]));
 
     //    $seller = seller::create(array_merge($validator->validated(), ["id_user" => $request->id_user, "nama_toko" => $request->nama_toko, "alamat_toko" => $request->alamat_toko, "no_toko" => $request->no_toko, "password" => bcrypt($request->password)]));
 
@@ -75,7 +76,6 @@ class AuthController extends Controller
 
        return response()->json([
         "message" => "Akun berhasil di register!",
-        "User" => $user,
         // "Seller" => $seller,
         // "Admin" => $admin,
        ], 201);
