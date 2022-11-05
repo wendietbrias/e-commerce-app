@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group([
-    "middleware" => "api",
+    "middleware" => "auth.guard",
     "prefix" => "auth",
 ], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
