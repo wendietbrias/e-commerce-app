@@ -1,35 +1,26 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
-import { Alert } from "../components";
-import { SignInHandler, SignUpHandler } from "../store/Auth";
-import { GoogleLogin } from "@react-oauth/google";
-import { GoogleLoginHandler } from "../store/Auth";
-import { OpenAlert } from "../store/Alert";
-
-const userRemember = JSON.parse(sessionStorage.getItem("remember")) || null;
+import { Navbar } from "../components";
 
 const Auth = () => {
-  const dispatch = useDispatch();
-  const { open } = useSelector((state) => state.alert);
   const { loading, user } = useSelector((state) => state.auth);
   const [authForm, setAuthForm] = useState({
     email: "",
     password: "",
     confirm: "",
-    nama: "",
+    name: "",
   });
-  const [remember, setRemember] = useState(userRemember ? true : false);
   const { pathname } = useLocation();
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (pathname === "/register") {
-      return dispatch(SignUpHandler({ authForm, dispatch }));
+      return;
     }
 
-    return dispatch(SignInHandler({ authForm, dispatch, remember }));
+    return;
   };
 
   const formHandler = (e) => {
@@ -40,20 +31,12 @@ const Auth = () => {
     if (user) {
       return (window.location.href = "/");
     }
-
-    if (userRemember && remember) {
-      setAuthForm({
-        email: userRemember?.email,
-        password: userRemember?.password,
-      });
-    }
-  }, [user, remember]);
+  }, [user]);
 
   return (
     <section className="min-w-screen min-h-screen relative">
       <img src="assets/pattern.png" alt="pattern" />
       <div className="bg-white shadow-lg shadow-gray-500 rounded-md py-5 px-5 absolute top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%]">
-        {open && <Alert />}
         <h2 className="text-center text-3xl font-bold">
           {pathname === "/register" ? "Register" : "Login"}
         </h2>
@@ -85,9 +68,8 @@ const Auth = () => {
               <input
                 type="text"
                 required
-                name="nama"
+                name="name"
                 onChange={formHandler}
-                value={authForm.name}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
             </div>
@@ -98,7 +80,6 @@ const Auth = () => {
                 required
                 name="email"
                 onChange={formHandler}
-                value={authForm.email}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
             </div>
@@ -109,7 +90,6 @@ const Auth = () => {
                 required
                 name="password"
                 onChange={formHandler}
-                value={authForm.password}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
             </div>
@@ -120,7 +100,6 @@ const Auth = () => {
                 required
                 name="confirm"
                 onChange={formHandler}
-                value={authForm.confirm}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
             </div>
@@ -140,7 +119,6 @@ const Auth = () => {
                 required
                 name="email"
                 onChange={formHandler}
-                value={authForm.email}
                 className="w-full py-2 px-3  bg-input outline-none"
               />
             </div>
@@ -151,18 +129,11 @@ const Auth = () => {
                 required
                 name="password"
                 onChange={formHandler}
-                value={authForm.password}
                 className="w-full py-2 px-3   bg-input outline-none"
               />
             </div>
             <div className="flex items-center mt-2">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => {
-                  setRemember(e.target.checked);
-                }}
-              />
+              <input type="checkbox" />
               <p className="text-body font-normal ml-2">Remember me?</p>
             </div>
             <button className="w-full bg-button text-white font-semibold text-sm py-2 rounded-sm mt-5">

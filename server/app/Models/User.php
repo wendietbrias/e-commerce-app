@@ -20,6 +20,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(seller::class, 'email', 'email');
     }
 
+    public function admin()
+    {
+        return $this->belongsTo(admin::class, 'email', 'email');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -32,7 +37,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return ["User" => $this];
+        return ["user" => $this];
     }
 
     /**
