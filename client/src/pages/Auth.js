@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
+import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
 import { Navbar } from "../components";
+import { GoogleLoginHandler } from "../store/Auth";
 
 const Auth = () => {
+  const dispatch = useDispatch();
   const { loading, user } = useSelector((state) => state.auth);
   const [authForm, setAuthForm] = useState({
     email: "",
