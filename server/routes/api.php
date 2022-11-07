@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Main\CartController;
+use App\Http\Controllers\Main\ForgotPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +27,16 @@ Route::group([
 ], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::post('forget', [ForgotPassword::class, 'forgot']);
+    Route::post('reset', [ForgotPassword::class, 'reset']);
+});
+
+Route::group([
+    "middleware" => "api",
+    "prefix" => "cart",
+], function ($router) {
+    Route::post('add', [CartController::class, 'add']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('forget', [ForgotPassword::class, 'forgot']);
+    Route::post('reset', [ForgotPassword::class, 'reset']);
 });

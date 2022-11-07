@@ -40,14 +40,14 @@ class AuthController extends Controller
         }
 
         $admin = admin::where('email', $request->email)->get('isAdmin');
-        $data = User::with('seller')->where('email', $request->email)->get()->pluck('seller');
+        $penjual = User::with('seller')->where('email', $request->email)->get()->pluck('seller');
 
         if (count($admin) === 1)
         {
             return $this->login3($request);
         }
         
-        if ($data[0] === null)
+        if ($penjual[0] === null)
         {
             if (!$token = auth($this->guard_user)->attempt($validator->validated())) 
             {
@@ -57,23 +57,10 @@ class AuthController extends Controller
             return $this->respondWithToken($token);
         }
         return $this->login2($request);
-        // Config::set('jwt.user', App\Models\seller::class);
-        // Config::set('auth.providers.users.model', App\Models\seller::class);
-        // // $token = Auth::shouldUse('seller-api');
-        // $token = null;
-        // if (!$token = Auth::attempt($validator->validated()))
-        // {
-        //     return response()->json(["message" => "Unaothorized"], 401);
-        // }
-        // return response()->json([
-        //     "seller" => true,
-        //     "token" => $token,
-        // ], 200);
     }
 
     public function login2(Request $request)
     {
-        // Config::set('auth.providers.seller.model',\App\Models\seller::class);
         $seller = seller::where([
             'email' => $request->email,
         ])->first();

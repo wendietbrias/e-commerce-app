@@ -31,7 +31,7 @@ class seller extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return ["seller" => $this];
+        return ["user" => $this];
     }
 
     // protected static function boot()
