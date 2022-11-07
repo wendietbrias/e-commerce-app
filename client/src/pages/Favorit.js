@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Footer, Back } from "../components";
 import { useSelector } from "react-redux";
+import { ProductCard } from "../components";
+
+const datadummy = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function Favorit(props) {
   const [category, setCategory] = useState("tampil");
@@ -14,14 +17,18 @@ const Favorit = () => {
     <div className="p-20">
     <div className="text-button font-bold text-[50px] space-x-12 flex flex-row items-center">
     <Back /><button onClick={()=> setCategory("tampil")}> Semua Product</button> 
-    <div className="flex flex-row items-center  space-x-10">
+    <div className="flex flex-row items-center space-x-10">
     <div className="w-[3px] h-7 bg-button ml-20" />
     <button onClick={()=> setCategory("hapus")} className="text-[20px]">Hapus semua dari Favorite</button>
     </div>
     </div>
     {category==="tampil"?(
 <div>
-
+<div className="p-20 grid grid-cols-5 gap-4">
+          {datadummy?.map((product, idx) => (
+            <ProductCard key={idx} product={product} />
+          ))}
+        </div>
 </div>
     ):(
 {/* <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">

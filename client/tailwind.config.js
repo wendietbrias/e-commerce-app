@@ -8,6 +8,7 @@ module.exports = {
         body: "#727272",
         input: "#dfdfdf",
         button: "#197A09",
+        wrapper: "rgba(10,10,10,0.4)",
       },
     },
   },

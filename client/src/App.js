@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Auth, Home, Favorit, ProfileAdmin } from "./pages";
+import { Auth, Home, Favorit, ProfileAdmin, Admin, ProfileUser, Market } from "./pages";
 
 const App = () => {
   return (
@@ -8,6 +8,9 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/favorit" index element={<Favorit />} />
         <Route path="/profileadmin" index element={<ProfileAdmin />} />
+        <Route path="/profileuser" index element={<ProfileUser />} />
+        <Route path="/market" index element={<Market />} />
+        <Route path="/admin" index element={<Admin />} />
         <Route path="/register" element={<Auth />} />
       </Routes>
       <div>

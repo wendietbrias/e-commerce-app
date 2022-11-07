@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Footer, Back } from "../components";
-const ProfileAdmin = () => {
+
+function ProfileAdmin(props) {
+  const [category, setCategory] = useState("");
+
+
   return (
     <section className="flex flex-col justify-between min-h-screen w-full">
       <Navbar />
@@ -10,10 +14,20 @@ const ProfileAdmin = () => {
     <Back /><button> Profile</button>
 </div>
 <div className='relative block'>
-<button className="ml-[43%] mr-[43%] p-2 bg-gradient-to-r from-button to-white rounded-full relative block -mt-20 transtion hover:animate-bounce   ">
-    <img src='/assets/orang.jpg' className='h-[210px] rounded-full ' />
+<button className=" ml-[43%] mr-[43%] p-2 bg-gradient-to-r from-button to-white rounded-full relative block -mt-20 transtion hover:animate-bounce   ">
+    <img src='/assets/orang.jpg' onMouseLeave={()=> setCategory("keluar")} onMouseOver={()=> setCategory("tambah")} className='h-[210px] rounded-full ' />
+    {category=== "keluar"&&(
+        <div></div>
+        )
+}
+{category=== "tambah"&&(
+        <div className='-mt-10 ml-24 border-2 border-white p-2 absolute rounded-full delay-1000 bg-button text-white '>Change Picture</div>
+        )
+}
+
 </button>
-<img src="/assets/Subtract.jpg" className='block -mt-40 mx-auto py-6  ' />
+
+<img src="/assets/Subtract.jpg" className='block -mt-40 mx-auto py-6 ' />
 
 <div className='block'>
 <div className='absolute ml-60 -mt-[600px] flex flex-col space-y-10'>
@@ -118,7 +132,10 @@ const ProfileAdmin = () => {
 </div>
       <Footer />
       </section>
+      
   )
-}
+};
+
+
 
 export default ProfileAdmin
