@@ -17,7 +17,7 @@ class AuthGuard
     public function handle($request, Closure $next, $guard = null)
     {
         if (($request->user('api'))) {;
-        auth()->shouldUse('users');
+        auth()->shouldUse('api');
         }
 
         else if (($request->user('seller-api'))) {;

@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\admin;
 use App\Models\seller;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -39,14 +41,21 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $admin = admin::where('email', $request->email)->get('isAdmin');
+        $admin = admin::where('email', $request->email)->first('isAdmin');
+        // return $admin;
         $penjual = User::with('seller')->where('email', $request->email)->get()->pluck('seller');
+        // return $penjual;
 
-        if (count($admin) === 1)
+        if ($admin == true)
         {
             return $this->login3($request);
         }
-        
+        if (count($penjual) === 0)
+        {
+            return response()->json([
+                "message" => "Akun tidak ditemukan",
+            ]);
+        }
         if ($penjual[0] === null)
         {
             if (!$token = auth($this->guard_user)->attempt($validator->validated())) 
@@ -56,15 +65,26 @@ class AuthController extends Controller
 
             return $this->respondWithToken($token);
         }
-        return $this->login2($request);
+        if (count($penjual) === 1)
+        {
+            return $this->login2($request);
+        }
     }
 
     public function login2(Request $request)
     {
-        $seller = seller::where([
-            'email' => $request->email,
-        ])->first();
-        if (!$token = auth($this->guard_seller)->login($seller))
+        $password = seller::where('email', $request->email)->first();
+
+        $seller = Hash::check($request->password, $password->password);
+
+        if ($seller == false)
+        {
+            return response()->json([
+                "message" => "Akun tidak ditemukan",
+            ]);
+        }
+
+        if (!$token = auth($this->guard_seller)->login($password))
         {
             return response()->json(["message" => "Unaothorized"], 401);
         }
@@ -74,18 +94,24 @@ class AuthController extends Controller
 
     public function login3(Request $request)
     {
-        // $dupAdmin = user::with('admin')->where('email', $request->email)->get()->pluck('admin');
-        // if(count($dupAdmin) === 1)
-        // {
-        //     return response()->json(['message' => 'Anda bukan admin'], 422);
-        // }
-        $adminUser = admin::where(['email' => $request->email, 'password' => Hash::check('password', $request->password)])->first();
+        $adminUser = admin::where('email', $request->email)->first();
+
+        $password = Hash::check($request->password, $adminUser->password);
+
+        if ($password == false)
+        {
+            return response()->json([
+                "message" => "Akun tidak ditemukan",
+            ]);
+        }
 
         if (!$token = auth($this->guard_admin)->login($adminUser))
         {
-            return response()->json(["message" => "Unaothorized"], 401);
+            return response()->json([
+                "message" => "Unaothorized"
+            ], 401);
         }
-        // $token = Auth::shouldUse('seller-api');
+        // $token = Auth::shouldUse('admin-api');
         return $this->respondWithToken($token);
     }
 
@@ -103,13 +129,6 @@ class AuthController extends Controller
             "confirm" => "required|min:8|same:password",
         ]);
 
-        // if ($request->confirm !== $request->password)
-        // {
-        //     return response()->json([
-        //         "message" => "Password tidak sama",
-        //     ]);
-        // }
-
         if ($validator->fails())
         {
             return response()->json([
@@ -118,16 +137,9 @@ class AuthController extends Controller
         }
 
        User::create(array_merge($validator->validated(), ["password" => bcrypt($request->password)]));
-       
-    // $seller = seller::create(array_merge($validator->validated(), ["id_user" => $request->id_user, "nama_toko" => $request->nama_toko, "alamat_toko" => $request->alamat_toko, "no_toko" => $request->no_toko, "password" => bcrypt($request->password)]));
-
-    // $admin = admin::create(array_merge($validator->validated(), ["password" => bcrypt($request->password)]));
 
        return response()->json([
         "message" => "Akun berhasil di register!",
-        // "User" => $user,
-        // "Seller" => $seller,
-        // "Admin" => $admin,
        ], 201);
     }
 

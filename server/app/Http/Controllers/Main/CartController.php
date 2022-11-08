@@ -18,7 +18,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "access_token" => "required",
+            "id" => "required",
             "id_user" => "required",
             "nama_produk" => "required",
             "harga" => "required",
@@ -27,9 +27,26 @@ class CartController extends Controller
             "gambar" => "required|string",
         ]);
 
-        $relationship = User::with('cart')->where('id', $request->id_user)->get()->pluck('cart');
-        return $relationship;
+        if ($validator->fails())
+        {
+            return response()->json([
+                "message" => $validator->errors()->first(),
+            ]);
+        }
 
+        $checkProduk = cart::where([
+            'id' => $request->id,
+            'nama_produk' => $request->nama_produk,
+        ])->first();
+
+        if ($checkProduk != null)
+        {
+            $qty = $request->qty;
+            $cart = cart::find($request->id)->increment('qty', $qty);
+
+            return $cart;
+        }
+        
         // $token = $request->access_token;
         $cart = cart::create(array_merge($validator->validated()));
         return $cart;

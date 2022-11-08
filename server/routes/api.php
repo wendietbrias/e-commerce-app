@@ -26,6 +26,7 @@ Route::group([
     "prefix" => "auth",
 ], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('seller', [AuthController::class, 'seller'])->middleware('auth.guard:seller');
     Route::post('register', [AuthController::class, 'register']);
     Route::post('forget', [ForgotPassword::class, 'forgot']);
     Route::post('reset', [ForgotPassword::class, 'reset']);
