@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +12,7 @@ class cart extends Model
     protected $table = 'carts';
 
     protected $fillable = [
+        'id_produk',
         'id_user',
         'nama_produk',
         'harga',
@@ -21,8 +21,17 @@ class cart extends Model
         'gambar',
     ];
 
-    public function id_user()
+    protected $hidden = [
+        'id_user',
+    ];
+
+    public function user()
     {
-        return $this->BelongsTo(User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'id', 'id_user');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(product::class, 'id', 'id_produk');
     }
 }

@@ -36,8 +36,8 @@ Route::group([
     "middleware" => "api",
     "prefix" => "cart",
 ], function ($router) {
+    Route::post('list', [CartController::class, 'cart']);
     Route::post('add', [CartController::class, 'add']);
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('forget', [ForgotPassword::class, 'forgot']);
-    Route::post('reset', [ForgotPassword::class, 'reset']);
+    Route::post('delete/{id_produk}/{id_user}', [CartController::class, 'delete']);
+    Route::post('clear/{id_user}', [CartController::class, 'clear']);
 });

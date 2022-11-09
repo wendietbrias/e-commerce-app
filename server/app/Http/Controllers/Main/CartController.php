@@ -11,6 +11,18 @@ use Illuminate\Support\Facades\Validator;
 class CartController extends Controller
 {
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+    */
+    public function cart(Request $request)
+    {
+        $cartList = User::with('cart')->where('id', $request->id_user)->get();
+        $productList = cart::with('product')->where('id', $request->id)->get();
+        return $cartList;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -18,7 +30,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "id" => "required",
+            "id_produk" => "required",
             "id_user" => "required",
             "nama_produk" => "required",
             "harga" => "required",
@@ -35,31 +47,44 @@ class CartController extends Controller
         }
 
         $checkProduk = cart::where([
-            'id' => $request->id,
+            'id_produk' => $request->id_produk,
+            'id_user' => $request->id_user,
             'nama_produk' => $request->nama_produk,
         ])->first();
 
         if ($checkProduk != null)
         {
             $qty = $request->qty;
-            $cart = cart::find($request->id)->increment('qty', $qty);
+            $harga = $request->harga;
+            
+            $cart = cart::where('id_produk', $request->id_produk);
+            $cart->increment('qty', $qty);
+            $cart->increment('harga', $harga);
 
-            return $cart;
+            return;
         }
         
         // $token = $request->access_token;
-        $cart = cart::create(array_merge($validator->validated()));
-        return $cart;
+        $add = cart::create(array_merge($validator->validated()));
+        return response()->json([
+            "mesage" => $add
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Remove the specified resource from storage.
      *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function delete($id_produk, $id_user)
     {
-        //
+        $deleteCart = cart::where([
+            'id_produk' => $id_produk,
+            'id_user' => $id_user,
+        ])->delete();
+
+        return $deleteCart;
     }
 
     /**
@@ -68,9 +93,11 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function clear($id_user)
     {
-        //
+        $clear = cart::where('id_user', $id_user)->delete();
+
+        return $clear;
     }
 
     /**
@@ -85,17 +112,6 @@ class CartController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -103,17 +119,6 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }
