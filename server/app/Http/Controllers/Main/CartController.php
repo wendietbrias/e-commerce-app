@@ -15,11 +15,11 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function cart(Request $request)
+    public function cart($id_user)
     {
-        $cartList = User::with('cart')->where('id', $request->id_user)->get();
-        $productList = cart::with('product')->where('id', $request->id)->get();
-        return $cartList;
+        $cartList = User::with('cart')->where('id', $id_user)->get();
+        // $productList = cart::with('product')->where('id', $id_user)->get();
+        return response()->json($cartList);
     }
 
     /**
@@ -57,7 +57,10 @@ class CartController extends Controller
             $qty = $request->qty;
             $harga = $request->harga;
             
-            $cart = cart::where('id_produk', $request->id_produk);
+            $cart = cart::where([
+                'id_produk' => $request->id_produk,
+                'id_user' => $request->id_user,
+            ]);
             $cart->increment('qty', $qty);
             $cart->increment('harga', $harga);
 
