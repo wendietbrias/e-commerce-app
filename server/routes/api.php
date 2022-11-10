@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Main\CartController;
+use App\Http\Controllers\Main\CheckoutController;
 use App\Http\Controllers\Main\ForgotPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,4 +40,12 @@ Route::group([
     Route::post('add', [CartController::class, 'add']);
     Route::post('delete/{id_produk}/{id_user}', [CartController::class, 'delete']);
     Route::post('clear/{id_user}', [CartController::class, 'clear']);
+});
+
+Route::group([
+    "middleware" => "api",
+    "prefix" => "checkout",
+], function ($router) {
+    Route::get('list/{id_user}', [CheckoutController::class, 'list']);
+    Route::post('checkout/{id_user}', [CheckoutController::class, 'checkout']);
 });
