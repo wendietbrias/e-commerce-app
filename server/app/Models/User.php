@@ -25,6 +25,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(admin::class, 'email', 'email');
     }
 
+    public function cart() {
+        return $this->hasMany(Cart::class , "id_user" , "id");
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

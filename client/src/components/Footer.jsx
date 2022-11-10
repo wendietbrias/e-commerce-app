@@ -1,4 +1,5 @@
 import { useState } from "react";
+import kucing from "../assets/kucing.svg";
 
 const Footer = () => {
   const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
@@ -30,7 +31,7 @@ const Footer = () => {
           </p>
         </div>
         <div className="ml-12 flex flex-col items-center">
-          <img src="assets/kucing.svg" alt="Neko" className="w-[270px]" />
+          <img src={kucing} alt="Neko" className="w-[270px]" />
           <h4 className="text-button font-semibold text-2xl mt-3">
             Discover’s SiBelanja Company
           </h4>

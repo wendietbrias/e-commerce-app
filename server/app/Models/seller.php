@@ -19,6 +19,12 @@ class seller extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'email', 'email');
     }
 
+    public function products() {
+        return $this->hasMany(Product::class , "id" , "id_seller");
+    }
+
+
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -31,7 +37,7 @@ class seller extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return ["seller" => $this];
+        return ["user" => $this];
     }
 
     // protected static function boot()

@@ -1,34 +1,58 @@
+import "swiper/css";
+import "swiper/css/pagination";
+import "../style/Slider.css";
+
 import { useEffect, useState } from "react";
 import { Navbar, Footer } from "../components";
-import { useSelector } from "react-redux";
-import { AiOutlineSearch, AiOutlineHeart, AiFillStar } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineSearch } from "react-icons/ai";
 import { ProductCard } from "../components";
-
-const datadummy = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-const WrapperModal = ({ children, CloseModal }) => {
-  return (
-    <div
-      onClick={CloseModal}
-      className="fixed top-0 left-0 w-full h-screen bg-wrapper"
-    >
-      {children}
-    </div>
-  );
-};
+import { GetAllProduct } from "../store/Products";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper";
 
 const Home = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { products } = useSelector((state) => state.products);
   const [searchTerm, setSearchTerm] = useState("");
-  const [openStoreModal, setOpenStoreModal] = useState(true);
-  const [openCartModal, setOpenCartModal] = useState(false);
 
   return (
-    <section className="flex flex-col justify-between min-h-screen w-full">
-      <Navbar />
-      <div class="w-full">
-        <img src="assets/event.jpg" alt="event" className="w-full" />
-        <div className="py-7 px-20">
+    <div class="w-full">
+      <Swiper
+        slidesPerView={"auto"}
+        spaceBetween={0}
+        autoplay={{
+          delay: 2800,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Pagination, Autoplay]}
+        className="mySwiper"
+      >
+        <SwiperSlide>
+          <img src="assets/banner1.png" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner2.png" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner3.jpg" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner4.png" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner5.png" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner6.png" alt="event" className="w-full" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner7.png" alt="event" className="w-full" />
+        </SwiperSlide>
+      </Swiper>
+      <div className="py-7 px-20">
+        {products && products.length > 0 && (
           <form className="w-full flex justify-center my-10">
             <div className="rounded-full flex items-center overflow-hidden shadow-md shadow-slate-400 px-2">
               <AiOutlineSearch className="text-lg" />
@@ -40,15 +64,38 @@ const Home = () => {
               />
             </div>
           </form>
-          <div className=" px-20 grid grid-cols-5 gap-4">
-            {datadummy?.map((product, idx) => (
-              <ProductCard key={idx} product={product} />
-            ))}
-          </div>
+        )}
+        <div className="w-full">
+          {products && products?.data?.length > 0 ? (
+            <div className="grid grid-cols-4 gap-4">
+              {products?.data?.map((product, idx) => (
+                <ProductCard key={idx} type="user" product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center py-10 flex-col">
+              <img
+                src="assets/illus.svg"
+                alt="Ilustration"
+                className="w-[350px]"
+              />
+              <h2 className="font-bold text-xl mt-10">
+                Produk masih belum ditambahkan
+              </h2>
+            </div>
+          )}
         </div>
       </div>
-      <Footer />
-    </section>
+      <div className="flex items-center justify-center gap-x-3 my-10">
+        <button className="bg-button text-white py-2 px-3 text-sm rounded-md font-semibold">
+          Selanjutnya
+        </button>
+        <p className="font-bold text-lg">0</p>
+        <button className="bg-button text-white py-2 px-3 rounded-md text-sm font-semibold">
+          Kembali
+        </button>
+      </div>
+    </div>
   );
 };
 

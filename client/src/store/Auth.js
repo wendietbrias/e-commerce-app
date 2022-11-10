@@ -2,10 +2,29 @@ import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { OpenAlert } from "../store/Alert";
 
+const API = axios.create({
+  baseURL: "http://127.0.0.1:8000/api/auth",
+});
+
 const initialState = {
   user: JSON.parse(sessionStorage.getItem("user")) || null,
   loading: false,
 };
+
+export const SellerHandler = createAsyncThunk(
+  "seller/post",
+  async (sellerData) => {
+    try {
+      const { data } = await API.post("/seller", sellerData);
+      if (data) {
+        window.location.href = "/sellerprofile";
+      }
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+);
 
 export const SignInHandler = createAsyncThunk(
   `login/post`,
@@ -19,11 +38,9 @@ export const SignInHandler = createAsyncThunk(
       })
     );
     try {
-      const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/auth/login`,
-        authForm
-      );
-      const { token } = data;
+      const { data } = await API.post(`/login`, authForm);
+
+      const { access_token: token } = data;
       if (token) {
         if (typeof remember === "boolean" && remember) {
           sessionStorage.setItem("remember", JSON.stringify(authForm));
@@ -43,8 +60,6 @@ export const SignInHandler = createAsyncThunk(
           message: data.message,
         })
       );
-
-      return null;
     }
   }
 );
@@ -61,10 +76,7 @@ export const SignUpHandler = createAsyncThunk(
       })
     );
     try {
-      const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/auth/register`,
-        authForm
-      );
+      const { data } = await API.post(`/register`, authForm);
       if (data) {
         window.location.href = "/";
       }
@@ -97,10 +109,9 @@ const AuthSlice = createSlice({
         return state;
       }
     },
-    LogoutHandler(state, { payload }) {
+    LogoutHandler(state) {
       state.user = null;
       sessionStorage.setItem("user", JSON.stringify(state.user));
-      payload.setOpenUserModal(false);
       return state;
     },
   },
@@ -116,6 +127,11 @@ const AuthSlice = createSlice({
     });
     builder.addCase(SignInHandler.rejected, (state, { payload }) => {
       state.user = null;
+      sessionStorage.setItem("user", JSON.stringify(state.user));
+      return state;
+    });
+    builder.addCase(SellerHandler.fulfilled, (state, { payload }) => {
+      state.user = payload ? payload : null;
       sessionStorage.setItem("user", JSON.stringify(state.user));
       return state;
     });

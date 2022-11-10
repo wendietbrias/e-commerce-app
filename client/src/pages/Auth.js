@@ -2,37 +2,64 @@ import { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
-import { Navbar } from "../components";
-import { GoogleLoginHandler } from "../store/Auth";
+import { Navbar, Alert } from "../components";
+import {
+  GoogleLoginHandler,
+  SignInHandler,
+  SignUpHandler,
+} from "../store/Auth";
+
+const userRemember = JSON.parse(sessionStorage.getItem("user"));
 
 const Auth = () => {
+  //function dari redux
   const dispatch = useDispatch();
+
+  //mengambil data dari redux
   const { loading, user } = useSelector((state) => state.auth);
+  const { open } = useSelector((state) => state.alert);
+
+  //state untuk form handler
   const [authForm, setAuthForm] = useState({
     email: "",
     password: "",
     confirm: "",
     name: "",
   });
+
+  //state untuk fitur remember
+  const [remember, setRemember] = useState(false);
+
+  //mengambil pathname atau url dimana user sedang berada
   const { pathname } = useLocation();
 
+  //fungsi untuk melakukan submit data
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (pathname === "/register") {
-      return;
+      return dispatch(SignUpHandler({ authForm, dispatch }));
     }
 
-    return;
+    return dispatch(SignInHandler({ authForm, dispatch, remember }));
   };
 
+  //fungsi untuk mengambil value dari input form
   const formHandler = (e) => {
     setAuthForm({ ...authForm, [e.target.name]: e.target.value });
   };
 
+  //memanggil api
   useEffect(() => {
     if (user) {
       return (window.location.href = "/");
+    }
+
+    if (remember && userRemember) {
+      setAuthForm({
+        email: userRemember?.email,
+        password: userRemember?.password,
+      });
     }
   }, [user]);
 
@@ -40,6 +67,7 @@ const Auth = () => {
     <section className="min-w-screen min-h-screen relative">
       <img src="assets/pattern.png" alt="pattern" />
       <div className="bg-white shadow-lg shadow-gray-500 rounded-md py-5 px-5 absolute top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%]">
+        {open && <Alert />}
         <h2 className="text-center text-3xl font-bold">
           {pathname === "/register" ? "Register" : "Login"}
         </h2>
@@ -136,7 +164,11 @@ const Auth = () => {
               />
             </div>
             <div className="flex items-center mt-2">
-              <input type="checkbox" />
+              <input
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                type="checkbox"
+              />
               <p className="text-body font-normal ml-2">Remember me?</p>
             </div>
             <button className="w-full bg-button text-white font-semibold text-sm py-2 rounded-sm mt-5">

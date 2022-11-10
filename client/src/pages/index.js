@@ -1,2 +1,9 @@
 export { default as Auth } from "./Auth";
 export { default as Home } from "./Home";
+export { default as StartSelling } from "./StartSelling";
+export { default as OpenShop } from "./OpenShop";
+export { default as Category } from "./Category";
+export { default as SellerProfile } from "./SellerProfile";
+export { default as Detail } from "./Detail";
+export { default as Cart } from "./Cart";
+export { default as Main } from "./Main";
