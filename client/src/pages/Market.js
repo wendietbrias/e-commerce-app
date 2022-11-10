@@ -42,16 +42,14 @@ Add More Products?
 </div>
 </div>
 
-
-
 </div>
 </div>
     )
           }
             {category==="statiska"&&(
 
-<div className='w-screen h-screen bg-[#E0E8DE]'>
-   
+<div className='w-screen h-screen bg-[#E0E8DE] '>
+   <div className=''></div>
 </div>
 
     )

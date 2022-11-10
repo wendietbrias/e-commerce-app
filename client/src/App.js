@@ -6,12 +6,12 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route index element={<Home />} />
+        <Route path="/register" element={<Auth />} />
         <Route path="/favorit" index element={<Favorit />} />
         <Route path="/profileadmin" index element={<ProfileAdmin />} />
         <Route path="/profileuser" index element={<ProfileUser />} />
         <Route path="/market" index element={<Market />} />
         <Route path="/admin" index element={<Admin />} />
-        <Route path="/register" element={<Auth />} />
       </Routes>
       <div>
         

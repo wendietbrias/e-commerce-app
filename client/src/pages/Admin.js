@@ -31,26 +31,14 @@ const WrapperModal = ({ children, CloseModal }) => {
      <aside className="h-screen w-[35%]  bg-white border-[1.5px] border-gray-200">
     <div className="border-b-[1.5px] flex flex-row font-semibold p-8  justify-between">
       <div className="space-x-10">
-        <button onClick={()=> setCategory("feedback")} className="  hover:text-button active:text-green-800 focus:text-button after:text-button">
+        <button onClick={()=> {setCategory("feedback")} } className= {` tes hover:text-button active:text-green-800 focus:text-button after:text-button`}>
 Feedback
-
-<div className="absolute rounded-full  w-[5px] h-[5px] mt-2 bg-button ">
-
-{category=== "feedback" && (
-        <div className="absolute rounded-full w-[75px] h-[5px]  bg-button ">
-        </div>
-        )
-}
+<div className={`${category==="feedback"?"active":""} line`} >
 </div>
         </button>
-        <button onClick={()=> setCategory("report")} className="hover:text-button active:text-green-800 focus:text-button after:text-button">
+        <button onClick={()=> {setCategory("report")} } className={`tes hover:text-button active:text-green-800 focus:text-button after:text-button `}>
 Report
-<div className="absolute rounded-full  w-[5px] h-[5px] mt-2 bg-button ">
-{category=== "report" && (
-        <div className="absolute rounded-full transition duration-1000  w-[55px] h-[5px] bg-button ">
-        </div>
-        )
-}
+<div className={`${category==="report"?"active":""} line`}>
 </div>
         </button>
         </div>

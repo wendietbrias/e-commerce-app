@@ -14,19 +14,18 @@ function ProfileAdmin(props) {
     <Back /><button> Profile</button>
 </div>
 <div className='relative block'>
-<button className=" ml-[43%] mr-[43%] p-2 bg-gradient-to-r from-button to-white rounded-full relative block -mt-20 transtion hover:animate-bounce   ">
-    <img src='/assets/orang.jpg' onMouseLeave={()=> setCategory("keluar")} onMouseOver={()=> setCategory("tambah")} className='h-[210px] rounded-full ' />
+<button className="ml-[43%] mr-[43%] p-2 bg-gradient-to-r from-button to-white rounded-full relative block -mt-20 transtion  hover:animate-bounce " onMouseLeave={()=> setCategory("keluar")} onMouseOver={()=> setCategory("tambah")}>
+    <img src='/assets/orang.jpg'  className='h-[210px] rounded-full ' />
     {category=== "keluar"&&(
         <div></div>
         )
 }
 {category=== "tambah"&&(
-        <div className='-mt-10 ml-24 border-2 border-white p-2 absolute rounded-full delay-1000 bg-button text-white '>Change Picture</div>
+        <div className='-mt-10 ml-24 border border-white p-2 absolute rounded-full delay-1000 bg-button text-white '>Change Picture</div>
         )
 }
 
 </button>
-
 <img src="/assets/Subtract.jpg" className='block -mt-40 mx-auto py-6 ' />
 
 <div className='block'>
@@ -72,7 +71,7 @@ function ProfileAdmin(props) {
 </clipPath>
 </defs>
 </svg>
-<input type="nama"  placeholder='Jckyrvn' className='text-[22px] font-semibold text-[#646464] px-6 rounded-xl h-12 w-[400px]' />
+<input type="nama"  placeholder='serdam' className='text-[22px] font-semibold text-[#646464] px-6 rounded-xl h-12 w-[400px]' />
 </div>
 
 </div>
@@ -121,7 +120,7 @@ function ProfileAdmin(props) {
 </clipPath>
 </defs>
 </svg>
-<input type="nama"  placeholder='Jckyrvn' className='placeholder-[#197A09] border-2 border-button text-[22px] font-semibold text-[#646464] px-6 rounded-xl h-12 w-[400px]' />
+<input type="nama"  placeholder='089615578090' className='placeholder-[#197A09] border-2 border-button text-[22px] font-semibold text-[#646464] px-6 rounded-xl h-12 w-[400px]' />
 </div>
 </div>
 
