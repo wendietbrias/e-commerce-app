@@ -13,10 +13,24 @@ return [
     |
     */
 
+    // 'defaults' => [
+    //     'guard' => 'web',
+    //     'passwords' => 'users',
+    // ],
+
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
+    [
+        'guard' => 'api',
+        'passwords' => 'seller',
+    ],
+    [
+        'guard' => 'api',
+        'passwords' => 'admin',
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -35,10 +49,25 @@ return [
     |
     */
 
+    // 'guards' => [
+    //     'web' => [
+    //         'driver' => 'session',
+    //         'provider' => 'users',
+    //     ],
+    // ],
+
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
+        ],
+        'seller-api' => [
+            'driver' => 'jwt',
+            'provider' => 'seller',
+        ],
+        'admin-api' => [
+            'driver' => 'jwt',
+            'provider' => 'admin',
         ],
     ],
 
@@ -65,6 +94,16 @@ return [
             'model' => App\Models\User::class,
         ],
 
+        'seller' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\seller::class,
+        ],
+
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\admin::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -89,6 +128,18 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'seller' => [
+            'provider' => 'seller',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admin' => [
+            'provider' => 'admin',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
