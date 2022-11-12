@@ -22,6 +22,26 @@ class CartController extends Controller
         return response()->json($cartList , 200);
     }
 
+    public function update($id , Request $request) {
+        $header = $request->header('Authorization');
+
+        if($header === null) {
+            return response()->json(["message"=>"Unauthorized"] , 401);
+        }
+
+       if($id === null) {
+        return response()->json(["message"=>"Unauthorized"] , 401);
+       }
+
+       
+       $updated = Cart::where(["id"=>$id])->update([
+         "qty"=>$request->qty,
+         "total"=>$request->total 
+       ]);
+
+       return response()->json(["data"=>$updated, "status"=>true , "method"=>"patch"] , 200);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +49,12 @@ class CartController extends Controller
      */
     public function add(Request $request)
     {
+      $header = $request->header("Authorization");
+
+     if($header === null) {
+        return response()->json(["message"=>"Unauthorized"] , 401);
+     }
+
      $validateDup = Validator::make($request->only("id_produk" , "id_user" , "nama_produk") , [
         "id_produk"=>"required",
         "id_user"=>"required",
@@ -82,7 +108,7 @@ class CartController extends Controller
         // $token = $request->access_token;
         $add = cart::create(array_merge($validator->validated()));
         return response()->json([
-            "mesage" => $add,
+            "data" => $add,
             "method"=>"post",
             "status"=>true
         ] , 200);
@@ -94,14 +120,24 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id_produk, $id_user)
+    public function delete($id , Request $request)
     {
-        $deleteCart = cart::where([
-            'id_produk' => $id_produk,
-            'id_user' => $id_user,
-        ])->delete();
+       $header = $request->header("Authorization");
 
-        return $deleteCart;
+       if($header === null) {
+        return response()->json(["message"=>"Unauthorized"] ,401);
+       }
+
+       if($id === null) {
+        return response()->json(["message" => "cart dengan id $id tidak ditemukan"] , 400);
+       }
+ 
+        $deleteCart = cart::where("id" , $id)->delete();
+
+        if($deleteCart) {
+            return response()->json(["message"=>"Berhasil delete"] , 200);
+        }
+
     }
 
     /**
@@ -135,8 +171,5 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    
 }

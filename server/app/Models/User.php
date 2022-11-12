@@ -29,6 +29,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Cart::class , "id_user" , "id");
     }
 
+ public function favorit()
+    {
+        return $this->hasMany(Favorit::class, 'id_user', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -59,7 +64,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 

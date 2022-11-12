@@ -16,8 +16,10 @@ const Main = () => {
 
   useEffect(() => {
     dispatch(GetAllProduct());
-    dispatch(GetUserCart(decoded?.user?.id_user));
-  }, []);
+    if (user) {
+      dispatch(GetUserCart(decoded?.user?.id_user));
+    }
+  }, [user]);
 
   return (
     <section className="min-w-screen min-h-screen  flex flex-col justify-between">

@@ -16,11 +16,13 @@ export const SellerHandler = createAsyncThunk(
   async (sellerData) => {
     try {
       const { data } = await API.post("/seller", sellerData);
+      console.log(data);
       if (data) {
         window.location.href = "/sellerprofile";
       }
       return data;
     } catch (err) {
+      console.log(err);
       return err;
     }
   }
@@ -78,7 +80,7 @@ export const SignUpHandler = createAsyncThunk(
     try {
       const { data } = await API.post(`/register`, authForm);
       if (data) {
-        window.location.href = "/";
+        window.location.href = "/login ";
       }
     } catch (err) {
       const {
@@ -89,7 +91,7 @@ export const SignUpHandler = createAsyncThunk(
           open: true,
           variant: "bg-red-100",
           textVariant: "text-red-500",
-          message: data,
+          message: data.message,
         })
       );
       return data;
@@ -132,6 +134,11 @@ const AuthSlice = createSlice({
     });
     builder.addCase(SellerHandler.fulfilled, (state, { payload }) => {
       state.user = payload ? payload : null;
+      sessionStorage.setItem("user", JSON.stringify(state.user));
+      return state;
+    });
+    builder.addCase(SellerHandler.rejected, (state) => {
+      state.user = null;
       sessionStorage.setItem("user", JSON.stringify(state.user));
       return state;
     });

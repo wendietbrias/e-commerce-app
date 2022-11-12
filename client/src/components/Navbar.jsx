@@ -58,7 +58,7 @@ const Navbar = ({ path }) => {
           >
             <BsShop />
           </button>
-          <Link to="/favorites">
+          <Link to="/favorite">
             <button className="text-button text-xl mt-2">
               <AiOutlineHeart />
             </button>
@@ -109,7 +109,7 @@ const Navbar = ({ path }) => {
             </div>
           )}
           {openuserModal && (
-            <div className="bg-white absolute -bottom-32 right-0 border-2 border-button rounded-md overflow-hidden">
+            <div className="bg-white absolute -bottom-32 right-0 border-2 border-button rounded-md overflow-hidden z-[9999]">
               <Link to="/profile">
                 <button className="border-b-2 border-button py-3 px-5 text-button font-semibold flex items-center gap-x-2">
                   <FaUser />
@@ -136,7 +136,7 @@ const Navbar = ({ path }) => {
             <div className="bg-white rounded-md px-4 absolute top-20 right-14 w-[480px]">
               <header className="w-full border-b-2 border-gray-400 py-2 flex justify-between items-center">
                 <h4 className="text-sm font-medium text-gray-500">
-                  Keranjang Anda({carts.length})
+                  Keranjang Anda({Array.isArray(carts) && carts.length})
                 </h4>
                 <Link to="/cart">
                   <button className="text-button font-semibold text-sm">
@@ -145,7 +145,7 @@ const Navbar = ({ path }) => {
                 </Link>
               </header>
               <div className="w-full">
-                {carts?.length > 0 ? (
+                {carts && carts?.length > 0 ? (
                   carts.map((item, idx) => <CartItem key={idx} cart={item} />)
                 ) : (
                   <div className="w-full py-5">

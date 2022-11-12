@@ -22,9 +22,8 @@ API.interceptors.request.use((req) => {
 export const GetUserCart = createAsyncThunk("get/cart", async (id) => {
   try {
     const { data } = await API.get(`/list/${id}`);
-    console.log(data);
-    if (data) {
-      return data;
+    if (data && data.length > 0) {
+      return data[0].cart;
     }
   } catch (err) {
     return err;
@@ -33,16 +32,32 @@ export const GetUserCart = createAsyncThunk("get/cart", async (id) => {
 
 export const CreateCart = createAsyncThunk("post/cart", async (productData) => {
   try {
-    const { data } = await API.post(`/add`, productData);
+    const {
+      data: { data },
+    } = await API.post(`/add`, productData);
     return data;
   } catch (err) {
     return err;
   }
 });
 
-export const DeleteCart = createAsyncThunk("delete/cart", async () => {});
+export const DeleteCart = createAsyncThunk("delete/cart", async (id) => {
+  try {
+    await API.delete(`/delete/${id}`);
+    return id;
+  } catch (err) {
+    return err;
+  }
+});
 
-export const UpdateCart = createAsyncThunk("update/cart", async () => {});
+export const UpdateCart = createAsyncThunk("update/cart", async (cartData) => {
+  try {
+    const { data } = await API.patch(`/update/${cartData.id}`, cartData);
+    return cartData;
+  } catch (err) {
+    return null;
+  }
+});
 
 const CartSlice = createSlice({
   name: "carts",
@@ -56,6 +71,24 @@ const CartSlice = createSlice({
     });
     builder.addCase(CreateCart.fulfilled, (state, { payload }) => {
       state.carts = [...state.carts, payload];
+      return state;
+    });
+    builder.addCase(DeleteCart.fulfilled, (state, { payload }) => {
+      const filtered = state.carts.filter((cart) =>
+        cart.id !== payload ? cart : ""
+      );
+      state.carts = filtered;
+      return state;
+    });
+    builder.addCase(UpdateCart.fulfilled, (state, { payload }) => {
+      if (!payload) return;
+      const mapped = state.carts.map((item) =>
+        item.id === payload?.id
+          ? { ...item, qty: payload?.qty, total: payload?.total }
+          : item
+      );
+
+      state.carts = mapped;
       return state;
     });
   },

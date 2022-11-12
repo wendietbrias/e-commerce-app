@@ -41,7 +41,7 @@ export const GetAllProduct = createAsyncThunk("get/products", async () => {
     const { data } = await axios.get(`http://127.0.0.1:8000/api/product/all`);
     return data;
   } catch (err) {
-    return err;
+    return null;
   }
 });
 
@@ -95,17 +95,24 @@ const ProductSlice = createSlice({
   initialState,
   reducers: {
     createProductHandler() {},
+    SearchHandler(state, { payload }) {
+      if (!payload) return;
+      state.products = payload;
+      return state;
+    },
+    loadingHandler() {},
   },
   extraReducers: (builder) => {
-    builder.addCase(GetSellerProduct.fulfilled, (state, { payload }) => {
-      state.productsSeller = payload;
-      return state;
-    });
     builder.addCase(GetAllProduct.pending, (state, payload) => {
       state.loading = true;
       return state;
     });
+    builder.addCase(GetSellerProduct.fulfilled, (state, { payload }) => {
+      state.productsSeller = payload;
+      return state;
+    });
     builder.addCase(GetAllProduct.fulfilled, (state, { payload }) => {
+      if (!payload) return;
       state.loading = false;
       state.products = payload;
       return state;
@@ -135,5 +142,5 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { createProductHandler } = ProductSlice.actions;
+export const { createProductHandler, SearchHandler } = ProductSlice.actions;
 export default ProductSlice.reducer;

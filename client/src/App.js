@@ -10,6 +10,8 @@ import {
   Detail,
   Cart,
   Main,
+  Favorite,
+  Profile,
 } from "./pages";
 
 const App = () => {
@@ -19,8 +21,11 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
+        {/* auth routes  */}
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />
+
+        {/* nested routes */}
         <Route path="/" element={<Main />}>
           <Route path="/" element={<Home />} />
           <Route path="/category" element={<Category />} />
@@ -35,6 +40,8 @@ const App = () => {
           />
           <Route path="/product/:id" element={<Detail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/favorite" element={<Favorite />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </div>

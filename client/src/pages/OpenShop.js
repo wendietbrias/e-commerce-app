@@ -17,15 +17,14 @@ const OpenShop = () => {
 
   useEffect(() => {
     //mengecek apakah ada user atau tidak
-    if (!decoded) {
+    if (!user) {
       return (window.location.href = "/");
     }
 
-    //mengecek apakah user itu seller atau bukan
     if (decoded?.user?.is_seller) {
       return (window.location.href = "/");
     }
-  }, [decoded]);
+  }, [user]);
 
   //form handler
   const formHandler = (e) => {

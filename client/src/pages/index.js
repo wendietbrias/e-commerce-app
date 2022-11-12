@@ -7,3 +7,5 @@ export { default as SellerProfile } from "./SellerProfile";
 export { default as Detail } from "./Detail";
 export { default as Cart } from "./Cart";
 export { default as Main } from "./Main";
+export { default as Favorite } from "./Favorite";
+export { default as Profile } from "./Profile";

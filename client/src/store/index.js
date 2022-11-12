@@ -4,6 +4,7 @@ import Auth from "./Auth";
 import Alert from "./Alert";
 import Products from "./Products";
 import Cart from "./Cart";
+import Favorite from "./Favorite";
 
 const stores = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const stores = configureStore({
     alert: Alert,
     products: Products,
     carts: Cart,
+    favorite: Favorite,
   },
 });
 

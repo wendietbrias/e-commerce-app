@@ -24,7 +24,7 @@ const Auth = () => {
     email: "",
     password: "",
     confirm: "",
-    name: "",
+    nama: "",
   });
 
   //state untuk fitur remember
@@ -99,7 +99,8 @@ const Auth = () => {
               <input
                 type="text"
                 required
-                name="name"
+                name="nama"
+                value={authForm.nama}
                 onChange={formHandler}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
@@ -110,6 +111,7 @@ const Auth = () => {
                 type="email"
                 required
                 name="email"
+                value={authForm.email}
                 onChange={formHandler}
                 className="w-full py-2 px-3 outline-none bg-input"
               />
@@ -118,6 +120,7 @@ const Auth = () => {
               <label className="text-body mb-2">Password</label>
               <input
                 type="password"
+                value={authForm.password}
                 required
                 name="password"
                 onChange={formHandler}
@@ -128,6 +131,7 @@ const Auth = () => {
               <label className="text-body mb-2">Confirm</label>
               <input
                 type="password"
+                value={authForm.confirm}
                 required
                 name="confirm"
                 onChange={formHandler}
@@ -149,6 +153,7 @@ const Auth = () => {
                 type="email"
                 required
                 name="email"
+                value={authForm.email}
                 onChange={formHandler}
                 className="w-full py-2 px-3  bg-input outline-none"
               />
@@ -159,6 +164,7 @@ const Auth = () => {
                 type="password"
                 required
                 name="password"
+                value={authForm.password}
                 onChange={formHandler}
                 className="w-full py-2 px-3   bg-input outline-none"
               />
@@ -176,16 +182,16 @@ const Auth = () => {
             </button>
           </form>
         )}
-        <div className="border-t border-gray-300 pt-3 mt-3 flex justify-center items-center">
-          {pathname === "/login" && (
+        {pathname === "/login" && (
+          <div className="border-t border-gray-300 pt-3 mt-3 flex justify-center items-center">
             <GoogleLogin
               onSuccess={(response) => {
                 dispatch(GoogleLoginHandler(response?.credential));
               }}
               onError={(err) => console.log(err)}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

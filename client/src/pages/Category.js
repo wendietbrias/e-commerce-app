@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Navbar, Footer, ProductCard } from "../components";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
+import { SearchHandler } from "../store/Products";
+import axios from "axios";
 
 const dummy = [
   "Discover",
@@ -16,8 +19,21 @@ const dummy = [
 ];
 
 const Category = () => {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.products);
   const [category, setCategory] = useState("Discover");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const searchHandler = async (e) => {
+    const { data } = await axios.get(
+      `http://127.0.0.1:8000/api/product/search?query=${searchTerm}`
+    );
+    if (data) {
+      dispatch(SearchHandler(data));
+    }
+  };
+
+  const categoryHandler = () => {};
 
   return (
     <div className="py-10 px-20">
@@ -34,21 +50,25 @@ const Category = () => {
           </button>
         ))}
       </div>
-      <form className="w-full flex justify-center my-10">
+      <div className="w-full flex justify-center my-10">
         <div className="rounded-full flex items-center overflow-hidden shadow-md shadow-slate-400 px-2">
-          <AiOutlineSearch className="text-lg" />
+          <AiOutlineSearch
+            className="text-lg cursor-pointer"
+            onClick={searchHandler}
+          />
           <input
-            type="text"
-            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            type="text"
             className="outline-none px-2 w-[500px] bg-white py-2"
           />
         </div>
-      </form>
+      </div>
       <div className="grid grid-cols-5 gap-4">
-        {dummy?.map((item, idx) => (
-          <ProductCard key={idx} product={item} />
-        ))}
+        {Array.isArray(products?.data) &&
+          products?.data?.map((item, idx) => (
+            <ProductCard type="user" key={idx} product={item} />
+          ))}
       </div>
     </div>
   );

@@ -25,6 +25,22 @@ class ProductController extends Controller {
           ] , 200);
      }
 
+     public function searchProduct(Request $request) {
+           if($request->input("query") === null) {
+              $all = Product::all();
+              return response()->json(["data"=>$all , "method"=>"GET", "status"=>true] , 200);
+           }
+
+           $searchResult = Product::where('nama_produk','regexp' , $request->input("query"))->get();
+
+
+           if(count($searchResult) === 0) {
+               return response(["message"=>"Data tidak ditemukan"] ,400);
+           }
+
+           return response()->json(["data"=>$searchResult , "method"=>"get" , "status"=>true] , 200);
+     }
+
      public function getDetailProduct($id) {
           $product = Product::where("id" , $id)->get();
 

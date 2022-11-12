@@ -1,8 +1,9 @@
-<?php
+ <?php
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\CartController;
+use App\Http\Controllers\Product\FavoritController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::group([
     "prefix"=>"product"
 ], function($router) {
     Route::get("all", [ProductController::class, "getProduct"]);
+    Route::get("search" , [ProductController::class , "searchProduct"]);
     Route::get("{id}" , [ProductController::class,  "getDetailProduct"]);
     Route::post("create" , [ProductController::class , "createProduct"]);
     Route::get("seller/{id}" , [ProductController::class,  "GetSellerProduct"]);
@@ -47,6 +49,16 @@ Route::group([
 ], function ($router) {
     Route::get('list/{id_user}', [CartController::class, 'cart']);
     Route::post('add', [CartController::class, 'add']);
-    Route::post('delete/{id_produk}/{id_user}', [CartController::class, 'delete']);
+    Route::patch("update/{id}" , [CartController::class,  'update']);
+    Route::delete('delete/{id}', [CartController::class, 'delete']);
     Route::post('clear/{id_user}', [CartController::class, 'clear']);
+});
+
+Route::group([
+    "middleware" => "api",
+    "prefix" => "favorite",
+], function ($router) {
+    Route::get('list/{id_user}', [FavoritController::class, 'favorit']);
+    Route::post('like', [FavoritController::class, 'like']);
+    Route::delete("clear/{id_user}" , [FavoritController::class,  "clear"]);
 });
