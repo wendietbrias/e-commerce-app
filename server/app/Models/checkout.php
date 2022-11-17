@@ -16,6 +16,7 @@ class checkout extends Model
         'qty',
         'total',
         'biaya_layanan',
+        'id_produk',
         'nama_produk',
         'harga',
     ];

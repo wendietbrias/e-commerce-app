@@ -41,7 +41,7 @@ class ForgotPassword extends Controller
             ], 200);
         } 
         return response()->json([
-            'message' => [trans($status)],
+            'message' => trans($status),
         ], 401);
     }
 

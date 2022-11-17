@@ -73,7 +73,9 @@ class AuthController extends Controller
 
     public function login2(Request $request)
     {
-        $password = seller::where('email', $request->email)->first();
+        $email = seller::where('email', $request->email)->first();
+
+        $password = User::where('email', $email->email)->first();
 
         $seller = Hash::check($request->password, $password->password);
 
@@ -84,7 +86,7 @@ class AuthController extends Controller
             ]);
         }
 
-        if (!$token = auth($this->guard_seller)->login($password))
+        if (!$token = auth($this->guard_seller)->login($email))
         {
             return response()->json(["message" => "Unaothorized"], 401);
         }
@@ -149,9 +151,49 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function Seller(Request $request)
     {
-        //
+        $validator = Validator::make($request->all() , [
+            "nama_toko"=>'required',
+            "alamat_toko"=>'required',
+            "no_toko"=>'required',
+            "nama"=>'required',
+            "id_user"=>'required',
+            "email"=>"required",
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(["error"=>$validator->errors()->first()],400);
+        }
+
+        $created = seller::create([
+            "nama_toko"=>$request->nama_toko,
+            "alamat_toko"=>$request->alamat_toko,
+            "no_toko"=>$request->no_toko,
+            "nama"=>$request->nama, 
+            "email"=>$request->email,
+            "is_seller"=>true,
+            "id_user"=>$request->id_user
+            
+        ]);
+
+        if($created) {
+         $seller = seller::where([
+            "email" => $request->email,
+            "id_user" => $request->id_user,
+         ])->first();
+
+         if(!$token = auth($this->guard_seller)->login($seller))
+         {
+            return response()->json([
+                "message" => "Unaothorized"
+            ], 401);
+         }
+         return $this->respondWithToken($token);
+        }
+        return response()->json([
+            "message" => "Harap login ulang"
+        ], 400);
     }
 
     /**
@@ -176,27 +218,64 @@ class AuthController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function updateUser(Request $request, $id)
     {
-        //
+        $checkID = User::where('id', $id)->first();
+        if ($checkID == null)
+        {
+            return response()->json([
+                "message" => "Akun dengan id $id tidak ditemukan"
+            ]);
+        }
+
+        $updated = User::findorfail($id)->update([
+            "nama" => $request->nama,
+            "alamat" => $request->alamat,
+            "profile" => $request->profile
+        ]);
+        
+        if($updated)
+        {
+            return response()->json([
+                "data" => $request->all()
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Error"
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function updateSeller(Request $request , $id)
     {
-        //
+        $checkID = seller::where('id', $id)->first();
+        
+        if($checkID == null)
+        {
+            return response()->json([
+                "message" => "Akun dengan id $id tidak ditemukan"
+            ]);
+        }
+
+        $updated = seller::findOrFail($id)->update([
+            "nama" => $request->nama,
+            "alamat" => $request->alamat,
+            "profile" => $request->profile,
+            "nama_toko" => $request->nama_toko,
+            "alamat_toko" => $request->profile,
+            "no_toko" => $request->no_toko,
+        ]);
+
+        if($updated) 
+        {
+            return response()->json([
+                "data" => $request->all()
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Error"
+        ]);
     }
 
     protected function respondWithToken($token)

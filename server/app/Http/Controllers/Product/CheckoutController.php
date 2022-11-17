@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Main;
+namespace App\Http\Controllers\Product;
 
 use App\Models\cart;
 use App\Models\checkout;
@@ -42,11 +42,14 @@ class CheckoutController extends Controller
 
         $cart = cart::where('id_user', $id_user)->get([
             'id_user',
+            'id_produk',
             'qty',
             'total',
             'nama_produk',
             'harga',
         ]);
+
+        // return $cart;
 
         foreach ($cart as $carts)
         {
@@ -54,19 +57,23 @@ class CheckoutController extends Controller
             'id_user' => $carts->id_user,
             'qty' => $carts->qty,
             'total' => $carts->total,
+            'id_produk' => $carts->id_produk,
             'nama_produk' => $carts->nama_produk,
             'harga' => $carts->harga,
         ]));
 
         cart::where('id_user', $id_user)->delete();
+        }
 
+        if (count($cart) == null)
+        {
         return response()->json([
-            "message" => "Item berhasil di checkout",
+            "message" => "Item sudah di checkout",
         ]);
         }
 
         return response()->json([
-            "message" => "Item sudah di checkout",
+            "message" => "Item berhasil di checkout",
         ]);
     }
 

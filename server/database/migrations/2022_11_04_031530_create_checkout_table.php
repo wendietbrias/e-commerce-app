@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->integer('id_user');
             $table->string('pengiriman');
+            $table->integer('qty');
             $table->float('total');
             $table->float('biaya_layanan');
+            $table->integer('id_produk');
             $table->string('nama_produk');
             $table->float('harga');
             $table->timestamps();

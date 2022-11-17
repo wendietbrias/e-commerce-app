@@ -40,6 +40,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(checkout::class, 'id_user', 'id');
     }
 
+    public function favorit()
+    {
+        return $this->hasMany(favorit::class, 'id_user', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

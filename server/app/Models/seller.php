@@ -14,11 +14,16 @@ class seller extends Authenticatable implements JWTSubject
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['password', 'isSeller'];
+    protected $hidden = ['isSeller'];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'email', 'email');
+    }
+
+    public function product()
+    {
+        return $this->hasMany(product::class, 'id_seller', 'id');
     }
 
     public function getJWTIdentifier()
